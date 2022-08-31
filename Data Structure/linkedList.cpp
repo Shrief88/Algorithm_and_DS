@@ -153,8 +153,19 @@ class LinkedList{
                 tmp = tmp->next;    
             }
             return -1;
+        } 
 
-        }  
+        void reverse(){
+            Node* cur = head;
+            Node* prev = nullptr;
+            while (cur != nullptr){
+                Node* next = cur->next;
+                cur->next = prev;
+                prev = cur;
+                cur = next;
+            }
+            head = prev;
+        } 
 };
 
 
@@ -170,7 +181,9 @@ int main(){
     ll.insert(5);
     ll.insert(6);
 
-    ll.deleteKey(3);
+    
+    ll.print();
+    ll.reverse();
     ll.print();
     
 
