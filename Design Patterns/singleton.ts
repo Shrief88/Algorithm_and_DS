@@ -1,3 +1,11 @@
+// Singleton Pattern:
+// => creational design pattern that lets you ensure that a class has only one instance while provide a global access point to this instance.
+
+// => To implemented: 
+// 1) make the default constructor private, to prevent other objects from using the new keyword for creating new objects.
+
+// 2) create a static method that acts like constructor, under the hood it calls the private constructor to create an object and save it to a static field. All following calls should retuern the cached object.
+
 class Singleton{
   private static instance:Singleton; 
 
