@@ -3,12 +3,14 @@
 
 using namespace std;
 
-/* the goal of algorthim is to find the right place of the element
+/* 
+  the goal of algorthim is to find the right place of the element
   at n=1, the intial subarray is already sorted. 
   then from n=2 to the end of the array we search linearly to find the correct position for the element n, 
   this means after every step, the extended subarray is sorted.
   Insertion sort is adaptive, stable, in-place, online algorthim.   
 */
+
 void recursiveSort(vector<int> &vec,int size){
   if(size == 1){
     return;
@@ -45,9 +47,9 @@ void insertionSort(vector<int>& vec){
 
 
 int main(){
- vector<int> vec = {9,2,10,0};
- insertionSort(vec);
- for(int i=0;i<vec.size();i++){
-  cout << vec[i] << " ";
- } 
+  vector<int> vec = {9,2,10,0,5,3,90,85};
+  insertionSort(vec);
+  for(int i=0;i<vec.size();i++){
+    cout << vec[i] << " ";
+  } 
 }
