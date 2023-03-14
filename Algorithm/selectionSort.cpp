@@ -6,7 +6,11 @@ using namespace std;
 /*
   Selection sort is based on a simple observation: 
   the first element of a sorted array is the minimum of the whole array, and the second element is the second element of the whole array and so on.
-  best case = worst case = average case
+  Complexities: 
+  Worst case : O(n^2)
+  Best case : O(n^2)
+  Average case : O(n^2)
+  Space Complexity : O(1)
 */
 
 void selectionSort(vector<int> &vec){

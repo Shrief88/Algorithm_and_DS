@@ -3,6 +3,17 @@
 
 using namespace std;
 
+/*
+  merge sort is based on divide and conquer algorithm. 
+  The mergeSort function repeatedly divides the array into two halves until we reach a stage where we try to perform MergeSort on a subarray of size 1.
+  After that, the merge function comes into play and combines the sorted arrays into larger arrays until the whole array is merged  
+  Complexities: 
+  Worst case : O(nlog(n))
+  Best case : O(nlog(n))
+  Average case : O(nlog(n))
+  Space Complexity : O(n) 
+*/
+
 void merge(vector<int> &vec,int start,int middle, int end){
   vector<int> tmp;
   int ptr1 = start;

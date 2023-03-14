@@ -9,15 +9,14 @@ using namespace std;
   then from n=2 to the end of the array we search linearly to find the correct position for the element n, 
   this means after every step, the extended subarray is sorted.
   Insertion sort is adaptive, stable, in-place, online algorthim.   
+  Complexities: 
+  Worst case : O(n^2)
+  Best case : O(n)
+  Average case : O(n^2)
+  Space Complexity : O(1)
 */
 
-void recursiveSort(vector<int> &vec,int size){
-  if(size == 1){
-    return;
-  }
-
-  recursiveSort(vec,size-1);
-
+void inerstionSwap(vector<int>& vec,int size){
   int key = vec[size-1];
   int j = size-2;
   while(j >= 0 && vec[j]>key){
@@ -25,6 +24,14 @@ void recursiveSort(vector<int> &vec,int size){
     j--;
   }  
   vec[j+1] = key;
+}
+
+void recursiveSort(vector<int> &vec,int size){
+  if(size == 1){
+    return;
+  }
+  recursiveSort(vec,size-1);
+  inerstionSwap(vec,size);
 }
 
 void iterativeSort(vector<int> &vec){

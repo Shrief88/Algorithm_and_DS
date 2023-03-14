@@ -6,7 +6,11 @@ using namespace std;
 /*
   Bubble sort is a sorting algorithm that compares two adjacent elements and swaps them until they are in the intended order.
   In the first iteration we move largest element to end , In the second iteration we move second largest element to end and so on.
-
+  Complexities: 
+  Worst case : O(n^2)
+  Best case : O(n)
+  Average case : O(n^2)
+  Space Complexity : O(1)
 */
 
 void iterativeSort(vector<int> &vec){
