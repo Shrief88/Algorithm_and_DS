@@ -49,7 +49,7 @@ void mergeSort(vector<int> &vec,int start,int end){
   if(start == end)
     return;
 
-  int middle = (start+end)/2;
+  int middle = start + (end - start)/2;
   mergeSort(vec,start,middle);
   mergeSort(vec,middle+1,end);
 
