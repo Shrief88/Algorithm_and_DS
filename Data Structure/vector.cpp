@@ -6,136 +6,117 @@ using namespace std;
 class Vector{
     private:
         int *arr = nullptr;
-        int size = 0;
+        int size;
         int cap;
+        void expand_cap();
+        bool isFull();
 
     public:
-        Vector(int size): size(size){
-            if(size < 0)
-                size = 1;
-
-            cap = size + 10;    
-            arr = new int[cap]; 
-
-        }
-
-        ~Vector(){
-            delete[] arr;
-            arr = nullptr;
-        }
-
-        int get(int index){
-            return arr[index];
-        }
-
-        void set(int index,int value){
-            arr[index] = value;
-        }
-
-        void print(){
-            for(int i=0;i<size;i++){
-                cout << arr[i] << " ";
-            }
-            cout << endl;
-        }
-
-        int find(int value){
-            for(int i=0;i<size;i++){
-                if(arr[i]== value)
-                    return i;
-            }
-            return -1;
-        }
-
-        int getFront(){
-            return arr[0];
-        }
-
-        int getBack(){
-            return arr[size-1];
-        }
-
-        void expand_cap(){
-            cap *= 2;
-            int *newArr = new int[cap];
-            for(int i=0;i<size;i++)
-                newArr[i] = arr[i];
-            
-            swap (arr,newArr);
-            delete newArr;
-        }
-
-        void push_back(int value){
-            if(size == cap)
-                expand_cap();
-           
-           arr[size++] = value;
-        }
-
-        void insert(int value, int index){
-            if(size == cap)
-                expand_cap();
-
-            for(int i=size;i>index;i--)
-                arr[i] = arr[i-1]; 
-
-            size++;
-            arr[index]= value;       
-        }
-
-        void leftRotation(){
-            int tmp = arr[0];
-            for(int i=0;i<size-1;i++)
-                arr[i] = arr[i+1];
-
-            arr[size-1] = tmp;    
-        }
-
-        void rightRotation(){
-            int tmp = arr[size-1];
-            for(int i=size-1;i>0;i--)
-                arr[i]= arr[i-1];
-
-            arr[0] = tmp;    
-        }
-
-        void rightRotation(int steps){
-            steps = steps%size;
-
-            for(int i=0;i<steps;i++)
-                rightRotation();
-        }
-
-        int pop(int index){
-            int tmp = arr[index];
-            for(int i=index;i<size;i++){
-                arr[i] = arr[i+1]; 
-            }
-            size--;
-            return tmp;
-        }
-
-        int find_transposition(int value){
-            for(int i=0;i<size;i++){
-                if(arr[i] == value){
-                    if(i != 0){
-                        swap(arr[i],arr[i-1]);
-                        return i-1;
-                    }
-                    return 0;
-                }
-            }
-        }
+        Vector(int size);
+        Vector();
+        ~Vector();
+        void push_back(int value);
+        int get(int index);
+        void set(int index,int value);
+        void insert(int index,int value);
+        void print();
+        void pop(int index);
 };
 
+Vector::Vector(int size){
+    if(size < 0)
+        this->size = 0;
+    
+    this->size = 0;
+    cap = size + 10;    
+    arr = new int[cap]; 
+}
+
+Vector::Vector(){
+    size = 0;
+    cap = size + 10;    
+    arr = new int[cap]; 
+}
+
+
+Vector::~Vector(){
+    delete[] arr;
+    arr = nullptr;
+}
+
+void Vector::expand_cap(){
+    cap*=2;
+    int *newArr = new int[cap];
+    for(int i=0;i<size; i++){
+        newArr[i] = arr[i];
+    }
+
+    swap(arr,newArr);
+    delete[] newArr;
+}
+
+bool Vector::isFull(){
+    return size == cap ? true : false;
+}
+
+void Vector::push_back(int value){
+    if(isFull())
+        expand_cap();
+    arr[size++] =  value;
+}
+
+int Vector::get(int index){
+    if(index >= size)
+        return INT_MIN;
+
+    return arr[index];
+}
+
+void Vector::insert(int index,int value){
+    if(isFull())
+        expand_cap();
+    
+    for(int i=size+1 ; i>index ; i--)
+        arr[i] = arr[i-1];
+
+    arr[index] = value;
+    size++;
+}
+
+void Vector::set(int index,int value){
+    if(index >= size)
+        cout << "index is out of range";
+
+    arr[index] = value;
+}
+
+void Vector::print(){
+    for(int i=0;i<size;i++)
+        cout << arr[i] << " ";
+    cout << endl;
+}
+
+void Vector::pop(int index){
+    if(index >= size)
+        cout << "index is out of range";
+
+    for(int i=index ; i<size-1 ; i++)
+        arr[i] = arr[i+1];
+
+    size--;
+}
+
+
+
 int main(){
-    Vector v(5);
-    for(int i=0;i<10;i++)
-        v.set(i,i);
-
+    Vector v(2);
+    v.push_back(1);
+    v.push_back(4);
+    v.push_back(5);
+    v.push_back(8);
+    v.push_back(10);
+    v.pop(1);
     v.print();
-    v.rightRotation(2);
-    v.print();
-
+    
     
 }
