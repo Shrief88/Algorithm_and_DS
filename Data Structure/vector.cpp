@@ -1,5 +1,6 @@
 #include<iostream>
 #include <bits/stdc++.h>
+#include <assert.h>
 
 using namespace std;
 
@@ -21,6 +22,7 @@ class Vector{
         void insert(int index,int value);
         void print();
         void pop(int index);
+        int getSize();
 };
 
 Vector::Vector(int size){
@@ -66,9 +68,7 @@ void Vector::push_back(int value){
 }
 
 int Vector::get(int index){
-    if(index >= size)
-        return INT_MIN;
-
+    assert(index<size && index>=0);
     return arr[index];
 }
 
@@ -84,9 +84,7 @@ void Vector::insert(int index,int value){
 }
 
 void Vector::set(int index,int value){
-    if(index >= size)
-        cout << "index is out of range";
-
+    assert(index<size && index>=0);
     arr[index] = value;
 }
 
@@ -97,13 +95,15 @@ void Vector::print(){
 }
 
 void Vector::pop(int index){
-    if(index >= size)
-        cout << "index is out of range";
-
+    assert(index<size && index>=0);
     for(int i=index ; i<size-1 ; i++)
         arr[i] = arr[i+1];
 
     size--;
+}
+
+int Vector::getSize(){
+    return size;
 }
 
 
@@ -115,8 +115,7 @@ int main(){
     v.push_back(5);
     v.push_back(8);
     v.push_back(10);
-    v.pop(1);
-    v.print();
+    cout << v.get(4);
     
     
 }
