@@ -1,71 +1,79 @@
 #include<iostream>
-
+#include <bits/stdc++.h>
 
 using namespace std;
 
-#define MAX 1000
-
 class Stack{
     private:
-        int top;
-        int a[MAX];
+        int *arr;
         int size;
+        int cap;
+
     public:
-        Stack(){
-            top =  0; 
-            size = 0;
-        }
-
-        bool isStackFull(){
-            if (top>MAX-1)
-                return true;
-            else
-                return false;    
-        }
-
-        bool isStackEmpty(){
-            if(top == 0)
-                return true;
-            else
-                return false;    
-        }
-
-        void push(int number){
-            if(isStackFull()){
-                cout << "Stack OverFlow";
-                return;
-            }
-            a[top++] = number;
-            size++;
-        }
-
-        void pop(){
-            if(isStackEmpty()){
-               cout << "Stack is Empty";
-               return; 
-            }
-            top--;
-            size--;
-        }
-
-        int gettop(){
-            if(isStackEmpty()){
-               cout << "Stack is Empty";
-               return 0; 
-            }
-            return a[top-1];
-        } 
-
-        int getSize(){
-            return size;
-        }
-
-        void display(){
-            for(int i =top-1;i>=0;i--)
-                cout << a[i] << " ";
-        }
+        Stack();
+        Stack(int size);
+        bool isFull();
+        bool isEmpty();
+        void push(int value);
+        void pop();
+        int getTop();
+        int getSize();
+        void display();
 };
+
+Stack::Stack(){
+    cap = 1000;
+    size = 0;
+    arr = new int[cap];
+}
+
+Stack::Stack(int size){
+    assert(size > 0);
+    this->size = 0;
+    this->cap = size;
+    arr = new int[cap];
+}
+
+bool Stack::isFull(){
+    return size == cap ? true : false;
+}
+
+bool Stack::isEmpty(){
+    return size == 0 ? true : false;
+}
+
+void Stack::push(int value){
+   
+    assert(!isFull());
+    arr[size++] = value;
+}
+
+void Stack::pop(){
+    assert(!isEmpty());
+    size--;
+}
+
+int Stack::getTop(){
+    return arr[size-1];
+}
+
+int Stack::getSize(){
+    return size;
+}
+
+void Stack::display(){
+    for(int i = size-1;i>=0;i--)
+        cout << arr[i] << " ";
+    cout << endl;
+}
+
    
 int main(){
- 
+    Stack s;
+    s.push(5);
+    s.push(4);
+    s.display();
+    s.pop();
+    s.display();
+
 }

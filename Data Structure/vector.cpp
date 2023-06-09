@@ -26,8 +26,7 @@ class Vector{
 };
 
 Vector::Vector(int size){
-    if(size < 0)
-        this->size = 0;
+    assert(size > 0);
     
     this->size = 0;
     cap = size + 10;    
