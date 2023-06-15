@@ -8,17 +8,19 @@ class Node{
         int value;
         Node* right;
         Node* left;
+        int height;
         Node(int value){
             this->value = value;
             this->right = NULL;
             this->left = NULL;
+            this->height = 1;
         }
 };
 
 class BinarySearchTree{
     private:
         Node* root;
-        void insert(Node* treeNode,int value);
+        Node* insert(Node* treeNode,int value);
         Node* find(Node* treeNode,int value);
         int height(Node* treeNode);
         bool isBalance(Node* treeNode);
@@ -31,11 +33,18 @@ class BinarySearchTree{
         Node* getMin(Node* treeNode);
         bool findAncestors(int value,vector<Node*> &ancestors,Node* treeNode);
         Node* deleteNode(int value,Node* treeNode);
+        int getBalanceFactor(Node* treeNode);
+        Node* rightRotation(Node* q);
+        Node* leftRotation(Node* q);
+        Node* Balance(Node* treeNode);
+        Node* getSuccessor(int value);
+        Node* getPredecesor(int value);
+        bool findAncestors(int value,vector<Node*> &ancestors){return findAncestors(value,ancestors,root);};
 
     public:
         BinarySearchTree();
         ~BinarySearchTree(){clear(root);};
-        void insert(int value){insert(root,value);};
+        void insert(int value){root = insert(root,value);};
         Node* find(int value){return find(root,value);};
         int height(){return height(root);};
         bool isBalance(){ return isBalance(root);};
@@ -45,10 +54,7 @@ class BinarySearchTree{
         vector<int> levelOrder(){return levelOrder(root);};
         Node* getMax(){return getMax(root);};
         Node* getMin(){return getMin(root);};
-        Node* getSuccessor(int value);
-        Node* getPredecesor(int value);
-        bool findAncestors(int value,vector<Node*> &ancestors){return findAncestors(value,ancestors,root);};
-        Node* deleteNode(int value){return deleteNode(value,root);};
+        void deleteNode(int value){root = deleteNode(value,root);};
 };
 
 BinarySearchTree::BinarySearchTree(){
@@ -65,26 +71,79 @@ void BinarySearchTree::clear(Node* treeNode){
   treeNode = nullptr;
 }
 
-void BinarySearchTree::insert(Node* treeNode,int value){
+int BinarySearchTree::height(Node* treeNode){
+    if(!treeNode)
+        return 0;
+
+    return 1+ max(height(treeNode->right),height(treeNode->left));    
+}
+
+bool BinarySearchTree::isBalance(Node* treeNode){
+    if(!treeNode)
+        return false;
+
+    return (abs(height(treeNode->left)-height(treeNode->right)) > 1) ? false : true;
+}
+
+int BinarySearchTree::getBalanceFactor(Node* treeNode){
+    return height(treeNode->left) - height(treeNode->right);
+}
+
+Node* BinarySearchTree::rightRotation(Node* Q){
+    Node* P = Q->left;
+    Q->left = P->right;
+    P->right = Q;
+    Q->height = height(Q);
+    P->height = height(P);
+    return P;
+}
+
+Node* BinarySearchTree::leftRotation(Node* P){
+    Node* Q = P->right;
+    P->right = Q->left;
+    Q->left = P;
+    Q->height = height(Q);
+    P->height = height(P);
+    return Q;   
+}
+
+Node* BinarySearchTree::Balance(Node* treeNode){
+    int balanceFactor = getBalanceFactor(treeNode);
+   
+    if(balanceFactor == 2){
+        int leftBalanceFactor = getBalanceFactor(treeNode->left);
+        if(leftBalanceFactor == -1)
+            treeNode->left = leftRotation(treeNode->left);
+        return rightRotation(treeNode);
+    }
+        
+    else if(balanceFactor == -2){
+        int rightBalanceFactor = getBalanceFactor(treeNode->right);
+        if(rightBalanceFactor == 1)
+            treeNode->right = rightRotation(treeNode->right);
+        return leftRotation(treeNode);
+    }
+
+    return treeNode;
+}
+
+Node* BinarySearchTree::insert(Node* treeNode,int value){
     if(!treeNode){
-        Node* ptr = new Node(value);
-        root = ptr;
+        Node* newNode = new Node(value);  
+        return newNode;
     }
     else{
-        if(value>treeNode->value){
-            if(!treeNode->right){
-                Node* ptr = new Node(value);
-                treeNode->right = ptr;
-            }else
-                insert(treeNode->right,value);
-        }else{
-            if(!treeNode->left){
-                Node* ptr = new Node(value);
-                treeNode->left = ptr;
-            }else
-                insert(treeNode->left,value);
-        }
-    }   
+        if(value>treeNode->value)
+            treeNode->right = insert(treeNode->right,value);
+        else if(value < treeNode->value)
+            treeNode->left = insert(treeNode->left,value);
+        else 
+            return treeNode;
+    }
+
+    treeNode->height = height(treeNode);
+
+    return Balance(treeNode);
 }
 
 Node* BinarySearchTree::find(Node* treeNode,int value){
@@ -100,19 +159,6 @@ Node* BinarySearchTree::find(Node* treeNode,int value){
         return find(treeNode->left,value);     
 }
 
-int BinarySearchTree::height(Node* treeNode){
-    if(!treeNode)
-        return 0;
-
-    return 1+ max(height(treeNode->right),height(treeNode->left));    
-}
-
-bool BinarySearchTree::isBalance(Node* treeNode){
-    if(!treeNode)
-        return false;
-
-    return (abs(height(treeNode->left)-height(treeNode->right)) > 1) ? false : true;
-}
 
 void BinarySearchTree::inOrder(Node* treeNode){
     if(!treeNode)
@@ -241,6 +287,7 @@ Node* BinarySearchTree::getPredecesor(int value){
     }
 }
 
+
 Node* BinarySearchTree::deleteNode(int value,Node* treeNode){
     if(treeNode == nullptr)
         return treeNode;
@@ -268,25 +315,34 @@ Node* BinarySearchTree::deleteNode(int value,Node* treeNode){
             tmp = nullptr;
         }
 
-        if(tmp == root)
-            root = treeNode;
-
         if(tmp)
             delete tmp;   
+    }
+
+    if(treeNode){
+        treeNode->height = height(treeNode);
+        treeNode = Balance(treeNode);
     }
 
     return treeNode;
 }
 
 
-
 int main(){
     BinarySearchTree bst;
+    bst.insert(9);
+    bst.insert(6);
+    bst.insert(14);
+    bst.insert(13);
+    bst.insert(32);
+    bst.insert(7);
     bst.insert(10);
    
-    bst.deleteNode(10);
-    bst.inOrder();
-   
+    bst.deleteNode(6);
+    bst.deleteNode(14);
+    bst.deleteNode(32);
+    bst.deleteNode(9);
+    cout << bst.isBalance();
 }
 
 
