@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm> 
 
 using namespace std;
 
@@ -26,17 +27,27 @@ void countSort(vector<int> &vec){
   for(int i=0;i<vec.size();i++)
     countArray[vec[i]]++;
 
-  for(int i=0,k=0;i<countArray.size();i++){
-    if(countArray[i] > 0){
-      for(int j=0;j<countArray[i]; j++,k++)
-        vec[k] = i;
-    }
+  for(int i=1;i<countArray.size();i++){
+    countArray[i] += countArray[i-1];
   }  
+
+  rotate(countArray.rbegin(),countArray.rbegin()+1,countArray.rend());
+  
+  vector<int> sortedArray(vec.size());
+
+  for(int i=0;i<vec.size(); i++){
+    sortedArray[countArray[vec[i]]] = vec[i];
+    countArray[vec[i]]++;
+  }
+
+  for(int i=0;i<vec.size(); i++){
+    vec[i] = sortedArray[i];
+  }
 
 }
 
 int main(){
-  vector<int> vec = {9,3,10,9,5,3,90,9};
+  vector<int> vec = {1, 4, 1, 2, 7, 5, 2};
   countSort(vec);
   for(int i=0;i<vec.size();i++){
     cout << vec[i] << " ";
