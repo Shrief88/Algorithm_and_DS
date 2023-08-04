@@ -54,9 +54,6 @@ bool Trie::prefixExist(string s, int index = 0){
   }  
 }
 
-
-
-
 int main(){
   Trie t;
   t.insert("the");

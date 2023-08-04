@@ -12,6 +12,7 @@ class Stack{
     public:
         Stack();
         Stack(int size);
+        ~Stack();
         bool isFull();
         bool isEmpty();
         void push(int value);
@@ -32,6 +33,11 @@ Stack::Stack(int size){
     this->size = 0;
     this->cap = size;
     arr = new int[cap];
+}
+
+Stack::~Stack(){
+    delete[] arr;
+    arr = nullptr;
 }
 
 bool Stack::isFull(){
@@ -75,5 +81,4 @@ int main(){
     s.display();
     s.pop();
     s.display();
-
 }
